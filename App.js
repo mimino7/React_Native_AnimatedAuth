@@ -14,7 +14,7 @@ import Animated, {
   interpolate,
   withTiming,
 } from "react-native-reanimated";
-import Svg, { Image } from "react-native-svg";
+import Svg, { Image, ClipPath, Ellipse } from "react-native-svg";
 import styles from "./styles";
 
 export default function App() {
@@ -52,12 +52,16 @@ export default function App() {
     <View style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
         {/* StyleSheet.absoluteFill - зто то же самое что и style={position: 'absolute', left: 0, right: 0, top: 0, bottom: 0} */}
-        <Svg width={width + 1} height={height}>
+        <Svg width={width + 1} height={height + 100}>
+          <ClipPath id="clipPathId">
+            <Ellipse cx={width / 2} rx={height} ry={height + 100} />
+          </ClipPath>
           <Image
             href={require("./assets/splash_2.jpg")}
-            width={width}
-            height={height}
+            width={width + 100}
+            height={height + 100}
             preserveAspectRatio="xMidYMid slice" // на весь экран
+            clipPath="url(#clipPathId)"
           />
         </Svg>
 
