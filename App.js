@@ -29,9 +29,30 @@ export default function App() {
       [-height / 2, 0]
     );
     return {
-      opacity: 1,
       transform: [
         { translateY: withTiming(interpolation, { duration: 1000 }) },
+      ],
+    };
+  });
+
+  const buttonAnimatedStyle = useAnimatedStyle(() => {
+    const interpolation = interpolate(imagePosition.value, [0, 1], [250, 0]);
+    return {
+      opacity: withTiming(imagePosition.value, { duration: 500 }),
+      transform: [
+        { translateY: withTiming(interpolation, { duration: 1000 }) },
+      ],
+    };
+  });
+
+  const closeButtonAnimatedStyle = useAnimatedStyle(() => {
+    const interpolation = interpolate(imagePosition.value, [0, 1], [180, 440]);
+    return {
+      opacity: withTiming(imagePosition.value === 1 ? 0 : 1, {
+        duration: 800,
+      }),
+      transform: [
+        { rotate: withTiming(interpolation + "deg", { duration: 500 }) },
       ],
     };
   });
@@ -43,9 +64,7 @@ export default function App() {
     imagePosition.value = 0;
   };
 
-  const closeHandler = () => {
-    imagePosition.value = 1;
-  };
+  const closeHandler = () => {};
 
   console.log(width);
   return (
@@ -64,23 +83,34 @@ export default function App() {
             clipPath="url(#clipPathId)"
           />
         </Svg>
-
         {/* +++++++++++ closeButton +++++++++++++++ */}
-
-        <Pressable style={styles.closeButtonContainer} onPress={closeHandler}>
-          <Text>X</Text>
+        <Pressable
+          // style={stylses.closeButtonContainer}
+          onPress={() => (imagePosition.value = 1)}
+        >
+          <Animated.View
+            style={[styles.closeButtonContainer, closeButtonAnimatedStyle]}
+          >
+            <Text
+              style={{ fontSize: 20, lineHeight: 30 }}
+              // onPress={() => (imagePosition.value = 1)}
+            >
+              ╳
+            </Text>
+          </Animated.View>
         </Pressable>
       </Animated.View>
 
       <View style={styles.button_container}>
         {/* +++++++++++ Hidden with Animated +++++++++++++++ */}
-
-        <Pressable style={styles.button} onPress={loginHandler}>
-          <Text style={styles.buttonText}>LOG IN</Text>
-        </Pressable>
-        <Pressable style={styles.button} onPress={registerHandler}>
-          <Text style={styles.buttonText}>REGISTER</Text>
-        </Pressable>
+        <Animated.View style={buttonAnimatedStyle}>
+          <Pressable style={styles.button} onPress={loginHandler}>
+            <Text style={styles.buttonText}>LOG IN</Text>
+          </Pressable>
+          <Pressable style={styles.button} onPress={registerHandler}>
+            <Text style={styles.buttonText}>REGISTER</Text>
+          </Pressable>
+        </Animated.View>
 
         {/* +++++++++++ input form  +++++++++++++++++++ */}
 
