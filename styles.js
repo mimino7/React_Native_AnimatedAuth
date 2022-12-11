@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderWidth: 1,
     borderColor: "white",
-
+    //  Shadow =============
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   buttonText: {
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: "center",
     backgroundColor: "white",
-
+    //  Shadow =============
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -68,7 +67,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.34,
     shadowRadius: 6.27,
-
     elevation: 5,
   },
   textInput: {
