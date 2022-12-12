@@ -13,6 +13,7 @@ import Animated, {
   useAnimatedStyle,
   interpolate,
   withTiming,
+  withDelay,
 } from "react-native-reanimated";
 import Svg, { Image, ClipPath, Ellipse } from "react-native-svg";
 import styles from "./styles";
@@ -38,7 +39,7 @@ export default function App() {
   const buttonAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(imagePosition.value, [0, 1], [250, 0]);
     return {
-      opacity: withTiming(imagePosition.value, { duration: 500 }),
+      opacity: withTiming(imagePosition.value, { duration: 800 }),
       transform: [
         { translateY: withTiming(interpolation, { duration: 1000 }) },
       ],
@@ -46,7 +47,7 @@ export default function App() {
   });
 
   const closeButtonAnimatedStyle = useAnimatedStyle(() => {
-    const interpolation = interpolate(imagePosition.value, [0, 1], [180, 440]);
+    const interpolation = interpolate(imagePosition.value, [0, 1], [0, 440]);
     return {
       opacity: withTiming(imagePosition.value === 1 ? 0 : 1, {
         duration: 800,
@@ -57,14 +58,26 @@ export default function App() {
     };
   });
 
+  const formAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity:
+        imagePosition.value === 0
+          ? withDelay(
+              500,
+              withTiming(1, {
+                duration: 800,
+              })
+            )
+          : withTiming(0, { duration: 800 }),
+    };
+  });
+
   const loginHandler = () => {
     imagePosition.value = 0;
   };
   const registerHandler = () => {
     imagePosition.value = 0;
   };
-
-  const closeHandler = () => {};
 
   console.log(width);
   return (
@@ -102,7 +115,7 @@ export default function App() {
       </Animated.View>
 
       <View style={styles.button_container}>
-        {/* +++++++++++ Hidden with Animated +++++++++++++++ */}
+        {/* +++++++++++ Buttons  Hidden with Animated +++++++++++++++ */}
         <Animated.View style={buttonAnimatedStyle}>
           <Pressable style={styles.button} onPress={loginHandler}>
             <Text style={styles.buttonText}>LOG IN</Text>
@@ -114,14 +127,14 @@ export default function App() {
 
         {/* +++++++++++ input form  +++++++++++++++++++ */}
 
-        {/* <View style={styles.formInputContainer}>
+        <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
           <TextInput placeholder="Email" style={styles.textInput} />
           <TextInput placeholder="Full Name" style={styles.textInput} />
           <TextInput placeholder="Password" style={styles.textInput} />
           <View style={styles.formButton}>
             <Text style={styles.buttonText}>Log In</Text>
           </View>
-        </View> */}
+        </Animated.View>
       </View>
 
       <StatusBar hidden style="auto" />

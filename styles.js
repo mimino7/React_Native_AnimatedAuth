@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 35,
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginVertical: 7,
     borderWidth: 1,
     borderColor: "white",
     //  Shadow =============
@@ -47,9 +47,13 @@ const styles = StyleSheet.create({
   button_container: {
     justifyContent: "center",
     height: height / 3,
+    zIndex: 1,
   },
   formInputContainer: {
-    marginBottom: 70,
+    marginBottom: 15,
+    ...StyleSheet.absoluteFill, //StyleSheet.absoluteFill - зто то же самое что и style={position: 'absolute', left: 0, right: 0, top: 0, bottom: 0}
+    zIndex: -1,
+    justifyContent: "center",
   },
   closeButtonContainer: {
     justifyContent: "center",
@@ -76,7 +80,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 25,
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginVertical: 7,
     paddingLeft: 10,
   },
 });
