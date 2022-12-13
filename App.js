@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import {
   Button,
   Dimensions,
@@ -14,6 +15,7 @@ import Animated, {
   interpolate,
   withTiming,
   withDelay,
+  runOnJS,
 } from "react-native-reanimated";
 import Svg, { Image, ClipPath, Ellipse } from "react-native-svg";
 import styles from "./styles";
@@ -21,7 +23,9 @@ import styles from "./styles";
 export default function App() {
   const { width, height } = Dimensions.get("window");
   const imagePosition = useSharedValue(1);
-  console.log(">>>", imagePosition.value);
+
+  const [isRegistering, setRegistering] = useState(false);
+  // console.log(">>>", imagePosition.value);
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
@@ -68,15 +72,21 @@ export default function App() {
                 duration: 800,
               })
             )
-          : withTiming(0, { duration: 800 }),
+          : withTiming(0, { duration: 500 }),
     };
   });
 
   const loginHandler = () => {
     imagePosition.value = 0;
+    if (isRegistering) {
+      runOnJS(setRegistering)(false);
+    }
   };
   const registerHandler = () => {
     imagePosition.value = 0;
+    if (!isRegistering) {
+      runOnJS(setRegistering)(true);
+    }
   };
 
   console.log(width);
@@ -129,10 +139,14 @@ export default function App() {
 
         <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
           <TextInput placeholder="Email" style={styles.textInput} />
-          <TextInput placeholder="Full Name" style={styles.textInput} />
+          {isRegistering && (
+            <TextInput placeholder="Full Name" style={styles.textInput} />
+          )}
           <TextInput placeholder="Password" style={styles.textInput} />
           <View style={styles.formButton}>
-            <Text style={styles.buttonText}>Log In</Text>
+            <Text style={styles.buttonText}>
+              {isRegistering ? "REGISTER" : "LOG IN"}
+            </Text>
           </View>
         </Animated.View>
       </View>
