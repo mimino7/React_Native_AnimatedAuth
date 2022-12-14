@@ -16,6 +16,8 @@ import Animated, {
   withTiming,
   withDelay,
   runOnJS,
+  withSequence,
+  withSpring,
 } from "react-native-reanimated";
 import Svg, { Image, ClipPath, Ellipse } from "react-native-svg";
 import styles from "./styles";
@@ -23,9 +25,9 @@ import styles from "./styles";
 export default function App() {
   const { width, height } = Dimensions.get("window");
   const imagePosition = useSharedValue(1);
+  const formButtonScale = useSharedValue(1);
 
   const [isRegistering, setRegistering] = useState(false);
-  // console.log(">>>", imagePosition.value);
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
@@ -76,6 +78,10 @@ export default function App() {
     };
   });
 
+  const formButtonAnimatedStyle = useAnimatedStyle(() => {
+    return { transform: [{ scale: formButtonScale.value }] };
+  });
+
   const loginHandler = () => {
     imagePosition.value = 0;
     if (isRegistering) {
@@ -89,7 +95,6 @@ export default function App() {
     }
   };
 
-  console.log(width);
   return (
     <View style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
@@ -107,25 +112,18 @@ export default function App() {
           />
         </Svg>
         {/* +++++++++++ closeButton +++++++++++++++ */}
-        <Pressable
-          // style={stylses.closeButtonContainer}
-          onPress={() => (imagePosition.value = 1)}
-        >
+        <Pressable onPress={() => (imagePosition.value = 1)}>
           <Animated.View
             style={[styles.closeButtonContainer, closeButtonAnimatedStyle]}
           >
-            <Text
-              style={{ fontSize: 20, lineHeight: 30 }}
-              // onPress={() => (imagePosition.value = 1)}
-            >
-              ╳
-            </Text>
+            <Text style={{ fontSize: 20, lineHeight: 30 }}>╳</Text>
           </Animated.View>
         </Pressable>
       </Animated.View>
 
       <View style={styles.button_container}>
         {/* +++++++++++ Buttons  Hidden with Animated +++++++++++++++ */}
+
         <Animated.View style={buttonAnimatedStyle}>
           <Pressable style={styles.button} onPress={loginHandler}>
             <Text style={styles.buttonText}>LOG IN</Text>
@@ -143,11 +141,20 @@ export default function App() {
             <TextInput placeholder="Full Name" style={styles.textInput} />
           )}
           <TextInput placeholder="Password" style={styles.textInput} />
-          <View style={styles.formButton}>
-            <Text style={styles.buttonText}>
-              {isRegistering ? "REGISTER" : "LOG IN"}
-            </Text>
-          </View>
+          <Pressable
+            onPress={() =>
+              (formButtonScale.value = withSequence(
+                withSpring(1.5),
+                withSpring(1)
+              ))
+            }
+          >
+            <Animated.View style={[styles.formButton, formButtonAnimatedStyle]}>
+              <Text style={styles.buttonText}>
+                {isRegistering ? "REGISTER" : "LOG IN"}
+              </Text>
+            </Animated.View>
+          </Pressable>
         </Animated.View>
       </View>
 
